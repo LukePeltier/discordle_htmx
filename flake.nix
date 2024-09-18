@@ -72,6 +72,7 @@
           gomod2nix.legacyPackages.${system}.gomod2nix
           gopls
           air
+          tailwindcss
           (templ system)
         ];
       });
