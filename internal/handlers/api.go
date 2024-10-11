@@ -21,7 +21,23 @@ func RandomMessageAPIHandler(c echo.Context) error {
 	client := c.Get("entClient").(*ent.Client)
 	ctx := c.Request().Context()
 
-	query := "SELECT messages.ID FROM messages join message_scores on messages.id=message_scores.message_score_message join discord_members on messages.discord_member_messages=discord_members.id WHERE (length(trim(text)) - length(REPLACE(trim(text), ' ', ''))) > 5 AND length(REPLACE(trim(text), ' ', '')) > 9 and message_scores.score > 1 and discord_members.blacklisted=0 and NOT EXISTS (select 1 from blacklists where messages.text like '%' || blacklists.bad || '%') ORDER BY random() LIMIT 1;"
+	randomUserQuery := "SELECT discord_members.id from discord_members where discord_members.blacklisted=0 order by random() limit 1;"
+	userRows, err := client.QueryContext(ctx, randomUserQuery)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error querying db: [%s]", err.Error()))
+	}
+	defer userRows.Close()
+	var userID int
+
+	for userRows.Next() {
+		if err := userRows.Scan(&userID); err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Sprintf("Error parsing row return: [%s]", err.Error()))
+
+		}
+		break
+	}
+
+	query := fmt.Sprintf("SELECT messages.ID FROM messages join message_scores on messages.id=message_scores.message_score_message join discord_members on messages.discord_member_messages=discord_members.id WHERE (length(trim(text)) - length(REPLACE(trim(text), ' ', ''))) > 5 AND length(REPLACE(trim(text), ' ', '')) > 9 and message_scores.score > 1 and discord_members.id=%d and NOT EXISTS (select 1 from blacklists where messages.text like '%%' || blacklists.bad || '%%') ORDER BY random() LIMIT 1;", userID)
 
 	rows, err := client.QueryContext(ctx, query)
 	if err != nil {
