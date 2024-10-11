@@ -1,0 +1,51 @@
+package play
+
+import (
+	"github.com/lukepeltier/discordle/ent"
+	"github.com/lukepeltier/discordle/internal/templates/layout"
+)
+
+templ Play(message *ent.Message, member *ent.DiscordMember) {
+	@layout.Layout("Play Discordle") {
+		<div class="container" id="play-container">
+			<section class="hero">
+				<div class="hero-body">
+					<p class="title">Discordle</p>
+					<p class="subtitle"></p>
+				</div>
+			</section>
+			<div class="message-container">
+				<article class="media">
+					<figure class="media-left">
+						<p class="image is-64x64">
+							<img src="https://via.placeholder.com/64" alt="User Avatar"/>
+						</p>
+					</figure>
+					<div class="media-content">
+						<div class="content">
+							<div class="message-header">
+								<strong>{ member.Username }</strong> <small>{ message.DateSent }</small>
+							</div>
+							<div class="message-content">
+								<p>
+									{ message.Text }
+								</p>
+							</div>
+						</div>
+					</div>
+				</article>
+			</div>
+			<div class="field">
+				<label class="label">Sender:</label>
+				<div class="control">
+					<input class="input" type="text"/>
+				</div>
+			</div>
+			<div class="field">
+				<div class="control">
+					<button hx-post="/guess" hx-trigger="click" hx-target="#play-container" hx-swap="outerHTML" class="button is-primary">Guess</button>
+				</div>
+			</div>
+		</div>
+	}
+}

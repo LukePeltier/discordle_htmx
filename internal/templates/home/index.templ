@@ -4,14 +4,14 @@ import "github.com/lukepeltier/discordle/internal/templates/layout"
 
 templ Home() {
 	@layout.Layout("Discordle") {
-		<div class="hero bg-base-200 min-h-screen">
-			<div class="hero-content text-center">
-				<div class="max-w-md">
-					<h1 class="text-5xl font-bold">Discordle</h1>
-					<p class="py-6">Play Discordle now</p>
-					<button class="btn btn-primary">Play</button>
+		<section class="hero is-large has-text-centered">
+				<div class="hero-body">
+						<div>
+							<h1 class="title">Discordle</h1>
+							<p class="subtitle">Play Discordle now</p>
+							<a class="button is-link" href="/play">Play</a>
+						</div>
 				</div>
-			</div>
-		</div>
+			</section>
 	}
 }

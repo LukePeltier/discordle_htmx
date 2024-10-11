@@ -1,0 +1,1 @@
+<section class=\"hero is-large has-text-centered\"><div class=\"hero-body\"><div><h1 class=\"title\">Discordle</h1><p class=\"subtitle\">Play Discordle now</p><a class=\"button is-link\" href=\"/play\">Play</a></div></div></section>

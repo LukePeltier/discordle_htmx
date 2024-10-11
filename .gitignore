@@ -29,3 +29,4 @@ go.work.sum
 /discordle-htmx
 /result
 /tmp
+*.db
